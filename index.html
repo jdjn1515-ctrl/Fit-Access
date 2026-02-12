@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit Access - Seamless Gym Entry Platform</title>
+    <meta name="description" content="Privacy-first gym access with rotating QR codes, device biometrics, and secure authentication. No facial recognition database.">
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0F172A;
+            --accent: #10B981;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --background: #020617;
+            --surface: #0F172A;
+            --font-display: 'Cabinet Grotesk', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-display);
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-large {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 0 auto 2rem;
+            box-shadow: 0 0 60px rgba(16, 185, 129, 0.4);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1.25rem 3rem;
+            border-radius: 1rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: var(--font-display);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--text-primary);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .steps {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            line-height: 1.7;
+        }
+
+        /* Security Section */
+        .security {
+            padding: 8rem 2rem;
+        }
+
+        .security-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .security-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .security-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .security-item h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .security-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-white {
+            background: white;
+            color: #059669;
+            padding: 1.25rem 3rem;
+            border-radius: 1rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.125rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .step {
+                flex-direction: column;
+            }
+        }
+
+        /* Phone Mockup */
+        .phone-mockup {
+            margin: 4rem auto;
+            max-width: 300px;
+            position: relative;
+        }
+
+        .phone-frame {
+            background: #1E293B;
+            border-radius: 2rem;
+            padding: 1rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            border: 8px solid #0F172A;
+        }
+
+        .phone-screen {
+            background: var(--background);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            aspect-ratio: 9/19.5;
+        }
+
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo-large">FA</div>
+            <h1>Seamless Gym Access.<br>Privacy First.</h1>
+            <p class="subtitle">
+                Modern member entry platform with rotating QR codes, device biometrics, 
+                and zero facial recognition databases. Built for gyms who respect privacy.
+            </p>
+            <div class="cta-group">
+                <a href="fit-access-app.html" class="btn btn-primary">
+                    <span>Try Live Demo</span>
+                    <span>→</span>
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Fit Access?</h2>
+        <p class="section-subtitle">
+            The modern gym entry solution that prioritizes member privacy and security
+        </p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🔒</span>
+                <h3>Privacy-First Design</h3>
+                <p>
+                    No facial recognition database. No biometric templates on servers. 
+                    Face ID and Touch ID stay on the member's device, always.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3>Lightning Fast Entry</h3>
+                <p>
+                    Sub-second validation with rotating QR codes that refresh every 15 minutes. 
+                    Members get in fast, even during peak hours.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔑</span>
+                <h3>Passkey Authentication</h3>
+                <p>
+                    Modern WebAuthn/FIDO2 security. No passwords to remember or reset. 
+                    Just biometrics and cryptographic keys.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <h3>Works Offline</h3>
+                <p>
+                    Entry readers cache recent tokens. Members can access facilities 
+                    even with spotty internet connection.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🛡️</span>
+                <h3>Anti-Sharing Protection</h3>
+                <p>
+                    Single-use QR codes with device binding. Prevents members from 
+                    sharing screenshots with unauthorized users.
+                </p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">💳</span>
+                <h3>NFC Card Backup</h3>
+                <p>
+                    Physical tap cards for members who prefer them or don't have smartphones. 
+                    Full access without the app.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">
+            Get your gym up and running in minutes
+        </p>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Members Receive Invite</h3>
+                    <p>
+                        When someone joins your gym, send them an invite code via email or SMS. 
+                        They download the Fit Access app and link their membership instantly.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Secure Setup</h3>
+                    <p>
+                        Members enable Face ID/Touch ID (optional but recommended) and set up 
+                        a passkey for password-free login. All in under 2 minutes.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>QR Code Access</h3>
+                    <p>
+                        Members open the app, their QR code appears instantly. They scan it at 
+                        your entry reader and the door unlocks. That's it.
+                    </p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Automated Validation</h3>
+                    <p>
+                        The system checks membership status, access schedule, and token validity 
+                        in real-time. Entry logs are saved for your records.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="security">
+        <h2 class="section-title">Bank-Grade Security</h2>
+        <p class="section-subtitle">
+            Built on modern security standards, not outdated technology
+        </p>
+        <div class="security-grid">
+            <div class="security-item">
+                <div class="security-icon">🔐</div>
+                <h3>Rotating Tokens</h3>
+                <p>QR codes expire every 15 minutes and can only be used once</p>
+            </div>
+            <div class="security-item">
+                <div class="security-icon">📱</div>
+                <h3>Device Binding</h3>
+                <p>Tokens are linked to the device that generated them</p>
+            </div>
+            <div class="security-item">
+                <div class="security-icon">🚫</div>
+                <h3>Rate Limiting</h3>
+                <p>Max 3 QR generations per 5 minutes to prevent abuse</p>
+            </div>
+            <div class="security-item">
+                <div class="security-icon">🔒</div>
+                <h3>TLS Encryption</h3>
+                <p>All API calls encrypted with industry-standard TLS 1.3</p>
+            </div>
+            <div class="security-item">
+                <div class="security-icon">🗑️</div>
+                <h3>Data Retention</h3>
+                <p>Entry logs auto-deleted after 90 days (or 30, user's choice)</p>
+            </div>
+            <div class="security-item">
+                <div class="security-icon">✓</div>
+                <h3>GDPR Compliant</h3>
+                <p>Full data export, deletion, and opt-out controls</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Modernize Your Gym?</h2>
+        <p>Join forward-thinking facilities using Fit Access</p>
+        <a href="fit-access-app.html" class="btn-white">Try the Demo App →</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="fit-access-app.html">Demo</a>
+                <a href="API_DOCS.md">API Docs</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="#about">About</a>
+                <a href="#blog">Blog</a>
+                <a href="#careers">Careers</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="README.md">Documentation</a>
+                <a href="docs/SECURITY.md">Security</a>
+                <a href="docs/PRIVACY.md">Privacy Policy</a>
+                <a href="docs/USER_GUIDE.md">User Guide</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#terms">Terms of Service</a>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#gdpr">GDPR</a>
+                <a href="#ccpa">CCPA</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Fit Access. Made with ❤️ for the fitness industry. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
