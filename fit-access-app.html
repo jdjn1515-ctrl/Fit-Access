@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit Access App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #qrCode { margin: 20px; }
+        #biometricSetup { margin: 20px; }
+        #membershipManagement { margin: 20px; }
+        #entryHistory { margin: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Fit Access App</h1>
+    <div id="qrCode">
+        <h2>QR Code Generation</h2>
+        <input type="text" id="qrText" placeholder="Enter text for QR Code">
+        <button onclick="generateQRCode()">Generate QR Code</button>
+        <div id="qrcode"></div>
+    </div>
+    <div id="biometricSetup">
+        <h2>Biometric Setup</h2>
+        <button onclick="setupBiometric()">Setup Biometric</button>
+    </div>
+    <div id="membershipManagement">
+        <h2>Membership Management</h2>
+        <input type="text" id="memberName" placeholder="Enter Member Name">
+        <button onclick="addMember()">Add Member</button>
+        <div id="membersList"></div>
+    </div>
+    <div id="entryHistory">
+        <h2>Entry History</h2>
+        <button onclick="viewHistory()">View Entry History</button>
+        <div id="historyList"></div>
+    </div>
+    <script>
+        let members = [];
+        let entryHistory = [];
+
+        function generateQRCode() {
+            const qrText = $('#qrText').val();
+            $('#qrcode').empty();
+            const qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: qrText,
+                width: 128,
+                height: 128,
+            });
+        }
+
+        function setupBiometric() {
+            alert('Biometric setup initiated!');
+            // Implement biometric setup functionality here.
+        }
+
+        function addMember() {
+            const memberName = $('#memberName').val();
+            if (memberName) {
+                members.push(memberName);
+                $('#membersList').append('<div>' + memberName + '</div>');
+                $('#memberName').val('');
+            } else {
+                alert('Please enter a member name.');
+            }
+        }
+
+        function viewHistory() {
+            $('#historyList').empty();
+            entryHistory.forEach(entry => {
+                $('#historyList').append('<div>' + entry + '</div>');
+            });
+        }
+
+        // Sample data for entry history
+        function initSampleData() {
+            entryHistory = ['Member 1 accessed at 2026-02-12 23:00:00', 'Member 2 accessed at 2026-02-12 23:15:00'];
+        }
+
+        initSampleData();
+    </script>
+</body>
+</html>
